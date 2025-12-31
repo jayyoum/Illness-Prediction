@@ -1,0 +1,76 @@
+import os
+import pandas as pd
+import numpy as np
+from xgboost import XGBRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
+
+# === CONFIG ===
+lag_label = "lag3"
+intersected_var_path = "/Users/jay/Desktop/Illness Prediction/Processed Data/Regression Results/Selected Variables/intersected_variables_FS.csv"
+merged_data_dir = "/Users/jay/Desktop/Illness Prediction/Processed Data/Illness & Environmental"
+output_base_dir = "/Users/jay/Desktop/Illness Prediction/Processed Data/Regression Results/XGB with Split/FS_lag3_KoreaWide"
+test_size = 0.2  # 20% test split
+
+# === LOAD SELECTED VARIABLES ===
+var_df = pd.read_csv(intersected_var_path)
+selected_vars = var_df.iloc[:, 0].dropna().astype(str).tolist()
+print(f"✅ Using variables: {selected_vars}")
+
+# === LOOP THROUGH FILES ===
+for filename in os.listdir(merged_data_dir):
+    if not filename.endswith(f"_{lag_label}.csv"):
+        continue
+
+    illness_name = filename.replace(f"merged_data_", "").replace(f"_{lag_label}.csv", "")
+    file_path = os.path.join(merged_data_dir, filename)
+    df = pd.read_csv(file_path)
+
+    # Drop rows with NaNs
+    valid_rows = df[selected_vars].notna().all(axis=1) & df["CaseCount"].notna()
+    df = df[valid_rows]
+
+    if len(df) < 20:
+        print(f"⚠️ Skipping {illness_name}: not enough rows")
+        continue
+
+    X = df[selected_vars].values
+    y = df["CaseCount"].values
+
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=42, shuffle=True
+    )
+
+    # Train XGBoost
+    model = XGBRegressor(
+        n_estimators=100,
+        learning_rate=0.1,
+        max_depth=4,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        random_state=42,
+        objective='reg:squarederror',
+        verbosity=0
+    )
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+
+    r2 = r2_score(y_test, y_pred)
+    mse = mean_squared_error(y_test, y_pred)
+    importances = model.feature_importances_
+
+    result = {
+        "IllnessName": illness_name,
+        "R²_Test": round(r2, 4),
+        "MSE_Test": round(mse, 2)
+    }
+    for var, imp in zip(selected_vars, importances):
+        result[f"Importance_{var}"] = round(imp, 4)
+
+    # Save results
+    output_dir = os.path.join(output_base_dir, illness_name)
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, f"XGB_train_test_KoreaWide_{lag_label}.csv")
+    pd.DataFrame([result]).to_csv(output_path, index=False)
+    print(f"✅ XGBoost train-test (Korea-wide) done for {illness_name} — saved to {output_path}")

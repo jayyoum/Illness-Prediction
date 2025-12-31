@@ -1,0 +1,116 @@
+# Configuration file for Illness Prediction Project
+
+# Data paths (relative to project root)
+paths:
+  raw_data_dir: "data/Raw Data"
+  processed_data_dir: "data/Processed Data"
+  results_dir: "results"
+  plots_dir: "results/plots"
+  
+  # Subdirectories
+  climate_data_dir: "data/Raw Data/Climate Data 2"
+  atmospheric_data_dir: "data/Raw Data/Atmospheric CSV"
+  illness_data_dir: "data/Raw Data/Illness data"
+  
+  # Output paths
+  merged_env_output: "data/Processed Data/Merged Data/merged_env.csv"
+  illness_env_output_dir: "data/Processed Data/Illness & Environmental/Grouped"
+  regression_results_dir: "results/models"
+
+# Data processing parameters
+data_processing:
+  # Years to process
+  years: [2018, 2019, 2020, 2021, 2022, 2023]
+  
+  # Regional aggregation
+  aggregation_methods:
+    temperature: "mean"
+    rainfall: "sum"
+    pressure: "mean"
+    wind: "max"
+  
+  # Missing value handling
+  missing_value_strategy: "interpolate"  # Options: interpolate, forward_fill, zero
+
+# Feature engineering
+features:
+  # Lag features
+  lag_days: [7, 14, 21]
+  lag_features: ["Case_Count", "AvgTemp", "PM10", "AvgHumidity"]
+  
+  # Rolling window features
+  rolling_windows: [7, 14]
+  rolling_features: ["Case_Count", "AvgTemp", "PM10", "AvgHumidity"]
+  rolling_stats: ["mean", "std"]
+  
+  # Temporal features
+  temporal_features: true
+  include_season: true
+
+# Model parameters
+model:
+  # XGBoost default parameters
+  xgboost:
+    objective: "reg:squarederror"
+    random_state: 42
+    n_jobs: -1
+    verbosity: 0
+  
+  # RFECV parameters
+  rfecv:
+    step: 5
+    min_features_to_select: 20
+    cv_splits: 3
+    scoring: "neg_root_mean_squared_error"
+  
+  # Optuna optimization
+  optuna:
+    n_trials: 50
+    direction: "minimize"
+    timeout: null  # None for no timeout
+  
+  # Hyperparameter search space
+  hyperparameter_space:
+    n_estimators: [100, 1500]
+    learning_rate: [0.001, 0.3]
+    max_depth: [3, 10]
+    subsample: [0.5, 1.0]
+    colsample_bytree: [0.5, 1.0]
+    gamma: [1e-8, 1.0]
+    reg_alpha: [1e-8, 1.0]
+    reg_lambda: [1e-8, 1.0]
+
+# Training parameters
+training:
+  # Train/validation/test split
+  train_size: 0.70
+  val_size: 0.15
+  test_size: 0.15
+  
+  # Early stopping
+  early_stopping_rounds: 50
+  max_iterations: 1000
+  
+  # Cross-validation
+  cv_splits: 5
+  cv_shuffle: true
+
+# Evaluation
+evaluation:
+  metrics: ["r2", "rmse", "mae", "mape"]
+  save_predictions: true
+  save_feature_importance: true
+  plot_predictions: true
+
+# Illness-specific settings
+illness:
+  # Default illness to process (can be overridden via command line)
+  default_illness: "Acute_upper_respiratory_infections"
+  
+  # Lag days for illness-environment merge
+  default_lag_days: 0
+  
+  # Excluded variables
+  excluded_vars: ["MaxWindDir", "Year_x", "Year_y", "RegionCode", "Month", 
+                  "ParsedDateTime", "IllnessName", "DateTime"]
+
