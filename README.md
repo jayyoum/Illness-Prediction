@@ -277,7 +277,7 @@ This is a research codebase. For questions or issues, please open an issue on Gi
 
 ## Contact
 
-For questions about this project, please contact [Your Email].
+For questions about this project, please contact jayyoum21@gmail.com
 
 ---
 
