@@ -1,0 +1,16 @@
+best_params:
+  alpha: 1.4477077983732212
+  colsample_bytree: 0.6650834577094079
+  eta: 0.01437639855698747
+  gamma: 2.1524308540789154
+  lambda: 0.02583834105860286
+  max_depth: 5
+  n_estimators: 362
+  subsample: 0.7817936495370337
+illness: Gastritis, unspecified
+n_features_initial: 21
+n_features_selected: 21
+test_mae: 2.7805771517742874
+test_r2: 0.9063664961595052
+test_rmse: 4.5361875638624705
+timestamp: '20260204_135227'

@@ -1,0 +1,16 @@
+best_params:
+  alpha: 0.17955971238003338
+  colsample_bytree: 0.5710405230479585
+  eta: 0.02257311412356069
+  gamma: 0.2607542436931359
+  lambda: 3.8803917510794035
+  max_depth: 6
+  n_estimators: 137
+  subsample: 0.7413058104926918
+illness: Chronic rhinitis
+n_features_initial: 21
+n_features_selected: 21
+test_mae: 1.487960289987797
+test_r2: 0.7676368879334762
+test_rmse: 2.69214244867821
+timestamp: '20260204_135205'
