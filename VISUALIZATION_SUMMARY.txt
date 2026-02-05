@@ -1,0 +1,103 @@
+===============================================================
+R VISUALIZATIONS GENERATED - SUMMARY
+===============================================================
+
+Illness Predicted: Acute Laryngopharyngitis
+└─ This IS an acute upper respiratory infection!
+   (inflammation of larynx and pharynx)
+
+===============================================================
+FEATURE IMPORTANCE GRAPHS (Bar Charts)
+===============================================================
+
+1. feature_importance_top20.png
+   ✓ Bar chart of 20 most important features
+   ✓ Color-coded by category
+   ✓ Top 3: Gyeonggi (50.8%), Seoul (27.8%), Busan (3.2%)
+
+2. feature_importance_by_category.png
+   ✓ Aggregated importance by feature type
+   ✓ Regional: 78.6%, Climate: 15%, Temporal: 4.3%
+
+3. experimental_features_importance.png
+   ✓ NEW time series features (lags 2, 5, 8, 12 days)
+   ✓ 5 features with rolling means on lag features
+
+===============================================================
+ACTUAL VS PREDICTED GRAPHS
+===============================================================
+
+4. actual_vs_predicted_timeseries.png
+   ✓ Full 2019-2023 overlay (blue=actual, orange=predicted)
+   ✓ R² = 0.946 | RMSE = 5.58 | MAE = 2.10
+
+5. actual_vs_predicted_2022_sample.png
+   ✓ Detailed view of 2022 for clarity
+   ✓ Shows daily prediction accuracy
+
+6. actual_vs_predicted_scatter.png
+   ✓ Each point = one day's prediction
+   ✓ Red dashed line = perfect prediction
+   ✓ Orange line = fitted trend
+
+7. residuals_plot.png
+   ✓ Checking for systematic errors
+   ✓ Points should scatter randomly around zero
+
+8. distribution_comparison.png
+   ✓ Density curves comparing actual vs predicted
+   ✓ Overlapping distributions = good calibration
+
+===============================================================
+MODEL PERFORMANCE
+===============================================================
+
+All Data (29,635 samples):
+  R² = 0.946  (94.6% variance explained)
+  RMSE = 5.58 cases
+  MAE = 2.10 cases
+
+Test Set Only (holdout):
+  R² = 0.798  (79.8% variance explained)
+  RMSE = 13.59 cases
+  MAE = 6.44 cases
+
+Note: Test set performance is more realistic for unseen data
+
+===============================================================
+KEY INSIGHTS FROM VISUALIZATIONS
+===============================================================
+
+✓ Regional patterns dominate (Gyeonggi + Seoul = 78.6%)
+✓ Day of week is highly predictive (4th most important)
+✓ Model captures seasonal and weekly patterns
+✓ Environmental factors have subtle but measurable effects
+✓ Experimental lag features (2, 5, 8, 12 days) selected
+✓ Snow depth is most important environmental variable
+
+===============================================================
+FILES LOCATION
+===============================================================
+
+All visualizations saved to:
+  results/experimental/visualizations/
+
+View with:
+  open results/experimental/visualizations/*.png
+
+Or individually:
+  open results/experimental/visualizations/feature_importance_top20.png
+
+===============================================================
+PUBLICATION READY
+===============================================================
+
+✓ Resolution: 300 DPI (publication-quality)
+✓ Format: PNG (web-ready, compatible)
+✓ Color scheme: Blue/orange (color-blind friendly)
+✓ Style: Clean minimal theme, clear labels
+✓ Total: 8 visualizations + raw data CSV
+
+===============================================================
+STATUS: ✓ ALL VISUALIZATIONS COMPLETE
+===============================================================
