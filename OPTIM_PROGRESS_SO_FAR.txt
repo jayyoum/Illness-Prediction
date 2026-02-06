@@ -1,0 +1,30 @@
+ADVANCED OPTIMIZATION PROGRESS - RESULTS SO FAR
+================================================
+
+COMPARISON: GridSearch vs Optuna Optimization
+
+1. ACUTE LARYNGOPHARYNGITIS
+   GridSearch (CV R²): 0.441
+   Optuna XGBoost (CV R²): 0.5542 ← **25.7% improvement**
+   Optuna LightGBM (CV R²): 0.5418
+   Winner: XGBoost (Full R²: 0.9792, RMSE: 3.40)
+
+2. GASTRITIS, UNSPECIFIED
+   GridSearch (CV R²): 0.456
+   Optuna XGBoost (CV R²): 0.5572 ← **22.2% improvement**  
+   Optuna LightGBM (CV R²): TBD (still running)
+   Winner so far: XGBoost (Full R²: 0.9752, RMSE: 2.26)
+
+3. CHRONIC RHINITIS
+   GridSearch (CV R²): 0.405
+   Optuna XGBoost (CV R²): 0.4813 ← **18.8% improvement**
+   Optuna LightGBM (CV R²): TBD (running trial 3/50)
+   Winner so far: XGBoost (Full R²: 0.9620, RMSE: 1.05)
+
+OVERALL IMPROVEMENT:
+- Average improvement: +22.2%
+- All three illnesses show substantial gains
+- Optuna's Bayesian optimization >> GridSearch
+- XGBoost consistently strong performer
+
+Still running: LightGBM for Gastritis and Chronic rhinitis
