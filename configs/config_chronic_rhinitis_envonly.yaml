@@ -1,0 +1,75 @@
+# Environmental-Only Configuration for Chronic Rhinitis
+# Research Focus: Pure environmental exposure effects (no illness autocorrelation)
+
+illness_name: "Chronic rhinitis"
+
+data:
+  target_column: "Case_Count"
+  datetime_column: "DateTime"
+  region_column: "Region"
+  
+features:
+  # Comprehensive daily lags (1-14 days) for ENVIRONMENTAL variables only
+  lag_days: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+  
+  # ENVIRONMENTAL variables ONLY (NO Case_Count!)
+  lag_features: ["AvgTemp", "PM10", "AvgHumidity"]
+  
+  # Original rolling windows for environmental variables
+  rolling_windows: [7, 14]
+  rolling_features: ["AvgTemp", "PM10", "AvgHumidity"]
+  rolling_stats: ["mean", "std"]
+  
+  # Rolling means for lag features
+  rolling_mean_for_lags: true
+  rolling_mean_windows: [3, 7]
+  
+  # Temporal features (keep for cyclical patterns)
+  temporal_features: true
+  include_season: false  # Exclude season, keep DayOfYear and DayOfWeek
+
+paths:
+  # Input paths (relative to project root)
+  raw_data_dir: "Raw Data"
+  processed_data_dir: "Processed Data"
+  climate_data_dir: "Raw Data/Climate Data 2"
+  atmospheric_data_dir: "Raw Data/Atmospheric CSV"
+  illness_data_dir: "Raw Data/Illness data"
+  
+  # Intermediate processed data
+  merged_env_output: "Processed Data/Merged Data/merged_env.csv"
+  illness_env_output_dir: "Processed Data/Illness & Environmental/Grouped/experimental"
+  
+  # Environmental-only results directory
+  results_dir: "results/experimental_chronic_rhinitis_envonly"
+  plots_dir: "results/experimental_chronic_rhinitis_envonly/plots"
+  regression_results_dir: "results/experimental_chronic_rhinitis_envonly/models"
+
+model:
+  # Model configuration
+  type: "xgboost"
+  objective: "reg:squarederror"
+  
+  # Feature selection
+  rfecv:
+    enabled: true
+    step: 5
+    cv: 5
+    min_features_to_select: 5
+  
+  # Hyperparameter optimization
+  optuna:
+    enabled: true
+    n_trials: 50
+    cv_folds: 5
+  
+  # Time series split
+  train_val_test_split:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    test_ratio: 0.15
+
+logging:
+  level: "INFO"
+  save_logs: true
+  log_dir: "results/experimental_chronic_rhinitis_envonly/logs"
